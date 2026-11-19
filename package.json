@@ -1,0 +1,9 @@
+{
+  "name": "cattle-health-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Netlify deployment dependencies for the Cattle Health Platform",
+  "dependencies": {
+    "mongoose": "^9.9.2"
+  }
+}
