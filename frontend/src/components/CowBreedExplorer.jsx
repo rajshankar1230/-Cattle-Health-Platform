@@ -272,7 +272,7 @@ const CowBreedExplorer = () => {
   const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/breeds')
+    axios.get('/api/breeds')
       .then(res => {
         if (res.data && res.data.length > 0) {
           setBreeds(res.data);
