@@ -27,11 +27,10 @@ exports.handler = async (event) => {
   try {
     await connectDB();
 
-    // Netlify rewrites /api/* to this function. Support both the
-    // rewritten function path and the original API path.
+    // Netlify rewrites /api/* to this function.
     let routePath = event.path || '/';
-    routePath = routePath.replace(/^\\/.netlify\\/functions\\/api/, '');
-    routePath = routePath.replace(/^\\/api/, '') || '/';
+    routePath = routePath.replace('/.netlify/functions/api', '');
+    routePath = routePath.replace(/^\/api/, '') || '/';
 
     if (routePath === '/health') {
       return json(200, { status: 'ok' });
@@ -42,10 +41,11 @@ exports.handler = async (event) => {
       return json(200, breeds);
     }
 
-    const match = routePath.match(/^\\/breeds\\/([^/]+)\\/?$/);
+    const match = routePath.match(/^\/breeds\/([^/]+)\/?$/);
     if (match) {
       const name = decodeURIComponent(match[1]);
-      const breed = await Breed.findOne({ name: new RegExp(`^${name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}$`, 'i') });
+      const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const breed = await Breed.findOne({ name: new RegExp('^' + escapedName + '$', 'i') });
       if (!breed) return json(404, { message: 'Breed record not found' });
       return json(200, breed);
     }
